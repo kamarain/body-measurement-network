@@ -14,6 +14,9 @@ If you use the code, data or even parts of them kindly cite our work.
  5. [Train silhouette network](#train-silhouette-network)
 
  ## Set up the environment
+Below basic instructions and they are valid at least for the tested environment that is *Ubuntu 18.04 LTS*
+
+### Python
 All major parts are implemented in Python in Linux environment. The tested setup is Ubuntu 18.04 with Anaconda installed (https://www.anaconda.com/distribution/) . The following libraries are needed to run various pieces of the code:
 
  ```
@@ -30,6 +33,14 @@ All major parts are implemented in Python in Linux environment. The tested setup
  $ conda install keras
  $ conda install Pillow
   ```
+### Octave
+One step (data generation) is implemented in Octave which is readily available for Linux distributions.
+
+ ```
+ $ sudo apt-get update
+ $ sudo apt-get install octave
+  ```
+
 
 ## Obtain 3D human body datasets
 
@@ -90,21 +101,16 @@ The main difference to CAESAR-fit dataset is that we need to fit a 3D body model
 Big networks require much more training samples than the current datasets provide. To solve this problem we generate synthetic samples according to the distribution of the dataset. At the moment this script is Octave/Matlab code. The following example is for Octave:
 
 ```
-$ octave --no-gui
-octave:1> body_meas_generate_3d_pca
+$ octave body_meas_generate_3d_pca.m
 temp_work = ./TEMPWORK
 num_of_pca =  50
 generate_num =  10000
-verbose = 0
-data_dir = caesar-fitted-meshes
-data_file = TEMPWORK/mpii_caesar_male_MAT_TRAIN.txt
-num_of_samples =  1745
-  Read data 1745/1745 Done!
-Computing PCA singular values and vectors... Done!
-  Generating samples 10000/10000 Done!
+...
+...
 All generated samples stored to ./TEMPWORK/mpii_caesar_male_MAT_TRAIN_GENERATED
  (see also ./TEMPWORK/mpii_caesar_male_MAT_TRAIN_GENERATED.txt)
-octave:2> exit
+$All generated samples stored to ./TEMPWORK/mpii_caesar_male_MAT_TRAIN_GENERATED
+ (see also ./TEMPWORK/mpii_caesar_male_MAT_TRAIN_GENERATED.txt)
 ```
 
 The above example assumes CAESAR-fit by Pishchulin et al. and provides samples as MAT files using their format.
