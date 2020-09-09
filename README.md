@@ -64,6 +64,12 @@ Note that MPII zip files do not provide much information - not even male/female 
 
 MPII CAESAR fit samples are ready to be used in the next step. They contain 6,449 vertices and 12,894 faces of the S-SCAPE  (Simple SCAPE) body mesh of (Jain et al. 2010). For more details about CAESAR-fit samples and how they are generated check the MPII Web site and read their paper (Pishchulin et al. 2017).
 
+Make symbolink link to the data directory from your code directory so that all functions find the data (data directory is pre-defined in the config file):
+  ```
+  $ cd <WORKDIR>/body-measurement-network
+  $ ln -s <DATADIR>/caesar-fitted-meshes
+  ```
+
 For network training you need to split the data to training and test samples. This can be by the following script:
   ```
   $ python body_meas_data_split.py -c config/caesar_simple_net.conf
