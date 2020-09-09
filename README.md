@@ -14,6 +14,9 @@ If you use the code, data or even parts of them kindly cite our work.
  5. [Train silhouette network](#train-silhouette-network)
 
  ## Set up the environment
+Below basic instructions and they are valid at least for the tested environment that is *Ubuntu 18.04 LTS*
+
+### Python
 All major parts are implemented in Python in Linux environment. The tested setup is Ubuntu 18.04 with Anaconda installed (https://www.anaconda.com/distribution/) . The following libraries are needed to run various pieces of the code:
 
  ```
@@ -30,6 +33,14 @@ All major parts are implemented in Python in Linux environment. The tested setup
  $ conda install keras
  $ conda install Pillow
   ```
+### Octave
+One step (data generation) is implemented in Octave which is readily available for Linux distributions.
+
+ ```
+ $ sudo apt-get update
+ $ sudo apt-get install octave
+  ```
+
 
 ## Obtain 3D human body datasets
 
@@ -64,6 +75,12 @@ Note that MPII zip files do not provide much information - not even male/female 
 
 MPII CAESAR fit samples are ready to be used in the next step. They contain 6,449 vertices and 12,894 faces of the S-SCAPE  (Simple SCAPE) body mesh of (Jain et al. 2010). For more details about CAESAR-fit samples and how they are generated check the MPII Web site and read their paper (Pishchulin et al. 2017).
 
+Make symbolink link to the data directory from your code directory so that all functions find the data (data directory is pre-defined in the config file):
+  ```
+  $ cd <WORKDIR>/body-measurement-network
+  $ ln -s <DATADIR>/caesar-fitted-meshes
+  ```
+
 For network training you need to split the data to training and test samples. This can be by the following script:
   ```
   $ python body_meas_data_split.py -c config/caesar_simple_net.conf
@@ -84,21 +101,16 @@ The main difference to CAESAR-fit dataset is that we need to fit a 3D body model
 Big networks require much more training samples than the current datasets provide. To solve this problem we generate synthetic samples according to the distribution of the dataset. At the moment this script is Octave/Matlab code. The following example is for Octave:
 
 ```
-$ octave --no-gui
-octave:1> body_meas_generate_3d_pca
+$ octave body_meas_generate_3d_pca.m
 temp_work = ./TEMPWORK
 num_of_pca =  50
 generate_num =  10000
-verbose = 0
-data_dir = caesar-fitted-meshes
-data_file = TEMPWORK/mpii_caesar_male_MAT_TRAIN.txt
-num_of_samples =  1745
-  Read data 1745/1745 Done!
-Computing PCA singular values and vectors... Done!
-  Generating samples 10000/10000 Done!
+...
+...
 All generated samples stored to ./TEMPWORK/mpii_caesar_male_MAT_TRAIN_GENERATED
  (see also ./TEMPWORK/mpii_caesar_male_MAT_TRAIN_GENERATED.txt)
-octave:2> exit
+$All generated samples stored to ./TEMPWORK/mpii_caesar_male_MAT_TRAIN_GENERATED
+ (see also ./TEMPWORK/mpii_caesar_male_MAT_TRAIN_GENERATED.txt)
 ```
 
 The above example assumes CAESAR-fit by Pishchulin et al. and provides samples as MAT files using their format.
@@ -167,7 +179,39 @@ Simply type:
 ```
 $ python body_meas_test_network.py -c config/caesar_simple_net.conf
 ```
-This file outputs all tested body measurements, their average values and average mean absolute error of the tested network.
+This file outputs all tested body measurements, their average values and average mean absolute error of the tested network. Example output:
+
+<pre>
+--- [Measure name]    [Avg value in mm]   [Mean error in mm] ---
+
+         a_head_circ Val=603.04 mae=9.08
+         b_neck_circ Val=393.62 mae=10.73
+        c_crotch_len Val=708.45 mae=11.39
+        d_chest_circ Val=1077.98 mae=53.15
+        e_waist_circ Val=957.63 mae=55.66
+       f_pelvis_circ Val=1031.40 mae=35.52
+   g_wrist_circ_left Val=181.61 mae=8.81
+  g_wrist_circ_right Val=185.40 mae=8.63
+   h_bicep_circ_left Val=321.82 mae=15.86
+  h_bicep_circ_right Val=315.82 mae=16.55
+ i_forearm_circ_left Val=288.51 mae=17.42
+i_forearm_circ_right Val=327.30 mae=13.62
+      j_arm_len_left Val=530.34 mae=11.66
+     j_arm_len_right Val=538.77 mae=16.25
+      k_leg_len_left Val=704.87 mae=11.73
+     k_leg_len_right Val=709.45 mae=15.81
+   l_thigh_circ_left Val=614.63 mae=18.44
+  l_thigh_circ_right Val=605.39 mae=17.54
+    m_calf_circ_left Val=415.68 mae=10.51
+   m_calf_circ_right Val=403.84 mae=10.03
+   n_ankle_circ_left Val=247.79 mae=8.12
+  n_ankle_circ_right Val=234.44 mae=7.57
+    o_overall_height Val=1767.38 mae=30.89
+  p_shoulder_breadth Val=403.66 mae=8.83
+----------------------------------------------------------------
+</pre>
+
+Above shows that average chest circumference in test samples is 1077.98mm (108cm) and the average prediction error is 53.15mm (5cm). Now you can continue by developing a better network and training it better! Good luck!
 
 ## References
 
