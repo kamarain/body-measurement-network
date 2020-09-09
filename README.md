@@ -179,7 +179,38 @@ Simply type:
 ```
 $ python body_meas_test_network.py -c config/caesar_simple_net.conf
 ```
-This file outputs all tested body measurements, their average values and average mean absolute error of the tested network.
+This file outputs all tested body measurements, their average values and average mean absolute error of the tested network. Example output:
+
+<pre>
+--- [Measure name]    [Avg value in mm]   [Mean error in mm] ---
+
+         a_head_circ Val=603.04 mae=9.08
+         b_neck_circ Val=393.62 mae=10.73
+        c_crotch_len Val=708.45 mae=11.39
+        d_chest_circ Val=1077.98 mae=53.15
+        e_waist_circ Val=957.63 mae=55.66
+       f_pelvis_circ Val=1031.40 mae=35.52
+   g_wrist_circ_left Val=181.61 mae=8.81
+  g_wrist_circ_right Val=185.40 mae=8.63
+   h_bicep_circ_left Val=321.82 mae=15.86
+  h_bicep_circ_right Val=315.82 mae=16.55
+ i_forearm_circ_left Val=288.51 mae=17.42
+i_forearm_circ_right Val=327.30 mae=13.62
+      j_arm_len_left Val=530.34 mae=11.66
+     j_arm_len_right Val=538.77 mae=16.25
+      k_leg_len_left Val=704.87 mae=11.73
+     k_leg_len_right Val=709.45 mae=15.81
+   l_thigh_circ_left Val=614.63 mae=18.44
+  l_thigh_circ_right Val=605.39 mae=17.54
+    m_calf_circ_left Val=415.68 mae=10.51
+   m_calf_circ_right Val=403.84 mae=10.03
+   n_ankle_circ_left Val=247.79 mae=8.12
+  n_ankle_circ_right Val=234.44 mae=7.57
+    o_overall_height Val=1767.38 mae=30.89
+  p_shoulder_breadth Val=403.66 mae=8.83
+----------------------------------------------------------------
+</pre>
+
 
 ## References
 
