@@ -211,6 +211,7 @@ i_forearm_circ_right Val=327.30 mae=13.62
 ----------------------------------------------------------------
 </pre>
 
+Above shows that average chest circumference in test samples is 1077.98mm (108cm) and the average prediction error is 53.15mm (5cm). Now you can continue by developing a better network and training it better! Good luck!
 
 ## References
 
