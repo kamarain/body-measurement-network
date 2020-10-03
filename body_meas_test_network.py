@@ -130,7 +130,18 @@ avg_val = np.average(Y_gt, axis=0)
 
 #
 # Print results
-print('--- [Measure name]    [Avg value in mm]   [Mean error in mm] ---\n')
+#print('--- [Measure name]    [Avg value in mm]   [Mean error in mm] ---\n')
+#for m in range(len(valid_measurements)):
+#    print('%20s Val=%4.2f mae=%4.2f' %(valid_measurements[m],avg_val[m],avg_mae[m]))
+#print('----------------------------------------------------------------\n')
+
+print('measurement_name Avg_value_in_mm Mean_error_in_mm Prosentual_error_% \n')
+total_error = 0
+total_error_procent = 0
 for m in range(len(valid_measurements)):
-    print('%20s Val=%4.2f mae=%4.2f' %(valid_measurements[m],avg_val[m],avg_mae[m]))
+    print('{} {} {} {}'.format(valid_measurements[m],avg_val[m],avg_mae[m],avg_mae[m]/avg_val[m]*100))
+    total_error += avg_mae[m]
+    total_error_procent += avg_mae[m]/avg_val[m]*100
+print('total - {} {}'.format(total_error, total_error_procent))
 print('----------------------------------------------------------------\n')
+
