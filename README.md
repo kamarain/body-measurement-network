@@ -213,6 +213,12 @@ i_forearm_circ_right Val=327.30 mae=13.62
 
 Above shows that average chest circumference in test samples is 1077.98mm (108cm) and the average prediction error is 53.15mm (5cm). Now you can continue by developing a better network and training it better! Good luck!
 
+NEW COMMANDS:
+conda activate humanbody_env
+
+training:
+python body_meas_train_network.py -c config/caesar_simple_net.conf -g true -s IMAGESIZE -n NETWORK
+
 ## References
 
 1. Leonid Pishchulin, Stefanie Wuhrer, Thomas Helten, Christian Theobalt and Bernt Schiele (2017), [Building Statistical Shape Spaces for 3D Human Modeling](http://humanshape.mpi-inf.mpg.de/), Pattern Recognition.

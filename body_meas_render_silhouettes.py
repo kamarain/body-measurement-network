@@ -32,6 +32,7 @@ parser = argparse.ArgumentParser(description=prog_text)
 parser.add_argument("-c", "--config", help="set configuration file")
 parser.add_argument("-g", "--generated", help="process generated body files (true/false)",default="false")
 parser.add_argument("-d", "--debug", help="produce debug information (true/false)",default="false")
+parser.add_argument("-s","--imagesize",type=int,help="you can add specific image size", default=224)
 parser.parse_args()
 
 # Read arguments from the command line
@@ -115,8 +116,13 @@ with open(data_list_file) as f:
 data_list = [x.strip() for x in data_list]
 
 # Generate the drawing window (of the silhouette size)
-img_width = json.loads(config['MAIN']['SilhouetteWidth'])
-img_height = json.loads(config['MAIN']['SilhouetteHeight'])
+if args.imagesize == 224:
+    img_width = json.loads(config['MAIN']['SilhouetteWidth'])
+    img_height = json.loads(config['MAIN']['SilhouetteHeight'])
+else:
+    img_width = args.imagesize
+    img_height = args.imagesize
+       
 window = pyglet.window.Window(img_width,img_height)
 
 data_list_ind = -1

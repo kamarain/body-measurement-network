@@ -29,6 +29,8 @@ parser = argparse.ArgumentParser(description=prog_text)
 parser.add_argument("-c", "--config", help="set configuration file")
 parser.add_argument("-g", "--generated", help="process generated body files (true/false)",default="false")
 parser.add_argument("-d", "--debug", help="produce debug information (true/false)",default="false")
+parser.add_argument("-s","--imagesize",type=int,help="you can add specific image size", default=224)
+parser.add_argument("-n","--network",type=int,help="you can select the used network", default=1)
 parser.parse_args()
 
 # Read arguments from the command line
@@ -49,6 +51,16 @@ if args.generated == "true":
 else:
     process_generated = False
 
+if args.imagesize == 224:
+    image_size = 224
+else:
+    image_size = args.imagesize
+    
+if args.network == 1:
+    network = 1
+else:
+    network = args.network
+    
 
 #
 # 2. Process config file and set parameters
@@ -230,18 +242,30 @@ epochs = json.loads(config[config_network]['Epochs'])
 
 # Define networks and their parameters (could be in separate files)
 if config_network == 'NET_SIMPLE_JONI':
-    model = Sequential([
-        Conv2D(16, 5, padding='same', activation='relu', input_shape=(224, 224, 1)),
-        MaxPooling2D(),
-        Conv2D(32, 3, padding='same', activation='relu'),
-        MaxPooling2D(),
-        Conv2D(32, 3, padding='same', activation='relu'),
-        MaxPooling2D(),
-        Flatten(),
-        Dense(32, activation='relu'),
-        Dense(len(valid_measurements))
-    ])
-
+    if (network == 1):
+        model = Sequential([
+            Conv2D(16, 5, padding='same', activation='relu', input_shape=(image_size, image_size, 1)),
+            MaxPooling2D(),
+            Conv2D(32, 3, padding='same', activation='relu'),
+            MaxPooling2D(),
+            Conv2D(32, 3, padding='same', activation='relu'),
+            MaxPooling2D(),
+            Flatten(),
+            Dense(32, activation='relu'),
+            Dense(len(valid_measurements))
+        ])
+    if (network == 2):
+          model = Sequential([
+            Conv2D(16, 5, padding='same', activation='relu', input_shape=(image_size, image_size, 1)),
+            MaxPooling2D(),
+            Conv2D(32, 3, padding='same', activation='relu'),
+            MaxPooling2D(),
+            Conv2D(32, 3, padding='same', activation='relu'),
+            MaxPooling2D(),
+            Flatten(),
+            Dense(32, activation='relu'),
+            Dense(len(valid_measurements))
+        ])
     num_of_epochs = json.loads(config[config_network]['Epochs'])
     learning_rate = json.loads(config[config_network]['LearningRate'])
     opt = tf.keras.optimizers.Adam(learning_rate=learning_rate)
@@ -253,7 +277,7 @@ if config_network == 'NET_SIMPLE_JONI':
 
 elif config_network == 'NET_CAESAR':
     # raise Exception('Unknown network:' + config_network)
-    input_f = Input(shape=(224, 224, 1))
+    input_f = Input(shape=(image_size, image_size, 1))
     x = Conv2D(64, 11, padding='same', kernel_initializer=tf.initializers.GlorotUniform(), activation='relu')(input_f)
     x = MaxPooling2D(pool_size=(3,3))(x)
     x = Conv2D(192, 5, padding='same', kernel_initializer=tf.initializers.GlorotUniform(), activation='relu')(x)
@@ -264,7 +288,7 @@ elif config_network == 'NET_CAESAR':
     x = MaxPooling2D(pool_size=(3, 3))(x)
     # conv_f = Model(inputs=input_f, outputs=x)
 
-    input_s = Input(shape=(224, 224, 1))
+    input_s = Input(shape=(image_size, image_size, 1))
     y = Conv2D(64, 11, padding='same', kernel_initializer=tf.initializers.GlorotUniform(), activation='relu')(input_s)
     y = MaxPooling2D(pool_size=(3,3))(y)
     y = Conv2D(192, 5, padding='same', kernel_initializer=tf.initializers.GlorotUniform(), activation='relu')(y)
@@ -311,23 +335,23 @@ model.save(Path(temp_dir,config[config_network]['SaveName']))
 
 
 ...
-# list all data in history
-print(history.history.keys())
-print(history.history['mean_absolute_error'])
-plt.plot(history.history['mean_absolute_error'])
-#plt.plot(history.history['val_accuracy'])
-plt.title('model performance')
-plt.ylabel('MAE')
-plt.xlabel('epoch')
-#plt.legend(['train', 'test'], loc='upper left')
-plt.legend(['train'], loc='upper left')
-plt.show()
-# summarize history for loss
-plt.plot(history.history['loss'])
-#plt.plot(history.history['val_loss'])
-plt.title('model loss')
-plt.ylabel('loss')
-plt.xlabel('epoch')
-#plt.legend(['train', 'test'], loc='upper left')
-plt.legend(['train'], loc='upper left')
-plt.show()
+## list all data in history
+#print(history.history.keys())
+#print(history.history['mean_absolute_error'])
+#plt.plot(history.history['mean_absolute_error'])
+##plt.plot(history.history['val_accuracy'])
+#plt.title('model performance')
+#plt.ylabel('MAE')
+#plt.xlabel('epoch')
+##plt.legend(['train', 'test'], loc='upper left')
+#plt.legend(['train'], loc='upper left')
+#plt.show()
+## summarize history for loss
+#plt.plot(history.history['loss'])
+##plt.plot(history.history['val_loss'])
+#plt.title('model loss')
+#plt.ylabel('loss')
+#plt.xlabel('epoch')
+##plt.legend(['train', 'test'], loc='upper left')
+#plt.legend(['train'], loc='upper left')
+#plt.show()
