@@ -262,10 +262,30 @@ if config_network == 'NET_SIMPLE_JONI':
             MaxPooling2D(),
             Conv2D(32, 3, padding='same', activation='relu'),
             MaxPooling2D(),
+            Conv2D(32, 3, padding='same', activation='relu'),
+            MaxPooling2D(),
             Flatten(),
             Dense(32, activation='relu'),
             Dense(len(valid_measurements))
         ])
+    if (network == 3):
+          model = Sequential([
+            Conv2D(16, 5, padding='same', activation='relu', input_shape=(image_size, image_size, 1)),
+            MaxPooling2D(),
+            Conv2D(32, 3, padding='same', activation='relu'),
+            MaxPooling2D(),
+            Conv2D(32, 3, padding='same', activation='relu'),
+            MaxPooling2D(),
+            Conv2D(32, 3, padding='same', activation='relu'),
+            MaxPooling2D(),
+            Conv2D(32, 3, padding='same', activation='relu'),
+            MaxPooling2D(),
+            Flatten(),
+            Dense(32, activation='relu'),
+            Dense(len(valid_measurements))
+        ])   
+  
+
     num_of_epochs = json.loads(config[config_network]['Epochs'])
     learning_rate = json.loads(config[config_network]['LearningRate'])
     opt = tf.keras.optimizers.Adam(learning_rate=learning_rate)
