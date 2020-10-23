@@ -1,10 +1,16 @@
 # Body Measurement Network
-This repository contains source codes for the experiments in the following paper:
 
- * Song Yan, Johan Wirta, Joni-Kristian Kämäräinen (2020): "Silhouette Body Measurement Benchmarks" In review
+**Authors**
 
-If you use the code, data or even parts of them kindly cite our work.
+* Johan Wirta - introduced the problem and provided the data
+* Song Yan - developed the main processing pipeline
+* Joni Kamarainen - re-wrote Python code and made the first baseline network (NET_SIMPLE_JONI)
+* Jori Vainola - optimized the network (NET_JORI)
 
+If you use any parts of the code or data, please cite our work:
+
+ * Song Yan, Johan Wirta, Joni-Kristian Kämäräinen (2020): "Silhouette Body Measurement Benchmarks", In International Conference on Pattern Recognition (ICPR)
+ 
  Running the code requires the following five steps:
 
  1. [Set up the environment](#set-up-the-environment)
