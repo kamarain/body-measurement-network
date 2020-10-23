@@ -2,10 +2,10 @@
 
 **Authors**
 
-* Johan Wirta - introduced the problem and provided the data
-* Song Yan - developed the main processing pipeline
-* Joni Kamarainen - re-wrote Python code and made the first baseline network (NET_SIMPLE_JONI)
-* Jori Vainola - optimized the network (NET_JORI)
+* Johan Wirta - introduced the problem and provided the data [2017]
+* Song Yan - developed the main processing pipeline [2017-2019]
+* Joni Kamarainen - re-wrote Python code and made the first baseline network (NET_SIMPLE_JONI) [2020]
+* Jori Vainola - optimized the network (NET_JORI) [2020]
 
 If you use any parts of the code or data, please cite our work:
 
