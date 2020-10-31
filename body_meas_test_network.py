@@ -27,6 +27,8 @@ parser = argparse.ArgumentParser(description=prog_text)
 parser.add_argument("-c", "--config", help="set configuration file")
 parser.add_argument("-s","--imagesize",type=int,help="you can add specific image size", default=224)
 parser.add_argument("-n","--network",type=int,help="you can select the used network", default=1)
+parser.add_argument("-a1","--angle1",type=int,help="rotation of first picture",default=45)
+parser.add_argument("-a2","--angle2",type=int,help="rotation of second picture",default=135)
 parser.parse_args()
 
 # Read arguments from the command line
@@ -47,6 +49,15 @@ if args.network == 1:
 else:
     network = args.network
 
+if args.angle1 == 45:
+    angle1 = 45
+else:
+    angle1 = args.angle1
+    
+if args.angle2 == 135:
+    angle2 = 135
+else:
+    angle2 = args.angle2
 #
 # 2. Process config file and set parameters
 config = configparser.ConfigParser()
@@ -159,6 +170,12 @@ worksheet.write(0,0, 'Image size')
 worksheet.write(0,1, image_size)
 worksheet.write(1,0, 'Network')
 worksheet.write(1,1, network)
+worksheet.write(2,0, 'Image count')
+worksheet.write(2,1, '10000')
+worksheet.write(3,0,'angle 1')
+worksheet.write(3,1,angle1)
+worksheet.write(4,0,'angle 2')
+worksheet.write(4,1,angle2)
 
 worksheet.write(5,0, 'measurement_name')
 worksheet.write(5,1, 'Avg_value_in_mm')

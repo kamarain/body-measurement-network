@@ -33,6 +33,8 @@ parser.add_argument("-c", "--config", help="set configuration file")
 parser.add_argument("-g", "--generated", help="process generated body files (true/false)",default="false")
 parser.add_argument("-d", "--debug", help="produce debug information (true/false)",default="false")
 parser.add_argument("-s","--imagesize",type=int,help="you can add specific image size", default=224)
+parser.add_argument("-a1","--angle1",type=int,help="rotation of first picture",default=45)
+parser.add_argument("-a2","--angle2",type=int,help="rotation of second picture",default=135)
 parser.parse_args()
 
 # Read arguments from the command line
@@ -53,6 +55,15 @@ if args.generated == "true":
 else:
     process_generated = False
 
+if args.angle1 == 45:
+    angle1 = 45
+else:
+    angle1 = args.angle1
+    
+if args.angle2 == 135:
+    angle2 = 135
+else:
+    angle2 = args.angle2
 #
 # 2. Process config file and set parameters
 config = configparser.ConfigParser()
@@ -205,7 +216,7 @@ def on_draw():
     gluLookAt(0,50,+2000,0,0,0,0,1,0)
 
     glRotatef(-90.0, 1.0, 0.0, 0.0)
-    glRotatef(45.0, 0.0, 0.0, 1.0)
+    glRotatef(angle1, 0.0, 0.0, 1.0)#angle1
 
     if wavefront_obj:
         visualization.draw(wavefront_obj)
@@ -240,7 +251,7 @@ def on_draw():
     gluLookAt(0,50,+2000,0,0,0,0,1,0)
 
     glRotatef(-90.0, 1.0, 0.0, 0.0)
-    glRotatef(135.0, 0.0, 0.0, 1.0) # Side View, Face to Right
+    glRotatef(angle2, 0.0, 0.0, 1.0) # Side View, Face to Right
 
     if wavefront_obj:
         visualization.draw(wavefront_obj)
