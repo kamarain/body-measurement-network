@@ -1,7 +1,7 @@
 % Configuration for data generation
 temp_work='./TEMPWORK'
 num_of_pca = 50
-generate_num = 10000
+generate_num = 100
 verbose = 0
 data_dir = 'caesar-fitted-meshes'
 data_file = 'TEMPWORK/mpii_caesar_male_MAT_TRAIN.txt'

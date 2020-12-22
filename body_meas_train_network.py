@@ -29,6 +29,7 @@ parser = argparse.ArgumentParser(description=prog_text)
 parser.add_argument("-c", "--config", help="set configuration file")
 parser.add_argument("-g", "--generated", help="process generated body files (true/false)",default="false")
 parser.add_argument("-d", "--debug", help="produce debug information (true/false)",default="false")
+parser.add_argument("-a","--angles",type=int,help="select amount of angles used (NET_JORI)", default=1)
 parser.parse_args()
 
 # Read arguments from the command line
@@ -48,6 +49,11 @@ if args.generated == "true":
     process_generated = True
 else:
     process_generated = False
+    
+if args.angles == 1:
+    angles = 1
+else:
+    angles = args.angles
 
 
 #
@@ -169,7 +175,11 @@ if config[config_network]['BatchTraining'] == 'true':
                 if config_network == 'NET_SIMPLE_JONI':
                     return [X_f], Y
                 elif config_network == 'NET_CAESAR':
-                        return [X_f, X_s], Y
+                    return [X_f, X_s], Y
+                elif config_network == 'NET_JORI' and angles == 1:
+                    return [X_f], Y
+                elif config_network == 'NET_JORI' and angles == 2:
+                    return [X_f, X_s], Y
                 else:
                     print(f"Batch input not defined for network called {config_network} !!")
 else: # read all data
@@ -285,6 +295,50 @@ elif config_network == 'NET_CAESAR':
     z = tf.squeeze(z, [1, 2])
 
     model = Model(inputs=[input_f, input_s], outputs=z)
+
+    num_of_epochs = json.loads(config[config_network]['Epochs'])
+    learning_rate = json.loads(config[config_network]['LearningRate'])
+    opt = tf.keras.optimizers.Adam(learning_rate=learning_rate)
+    model.compile(optimizer=opt,
+                  loss=tf.keras.losses.MeanSquaredError(),
+                  metrics=[tf.keras.metrics.MeanAbsoluteError()])
+
+    model.summary()
+    
+elif config_network == 'NET_JORI':
+    if (angles == 1):
+        model = Sequential([
+            Conv2D(32, 5, padding='same', activation='relu', input_shape=(224, 224, 1)),
+            MaxPooling2D(),
+            Flatten(),
+            Dense(32, activation='relu'),
+            Dense(len(valid_measurements))
+        ])
+    if (angles == 2):
+        input_f = Input(shape=(224, 224, 1))
+        x = Conv2D(32, 5, padding='same', activation='relu')(input_f)
+        x = MaxPooling2D()(x)
+        x = Flatten()(x)
+        x = Dense(32, activation='relu')(x)
+        x = Dense(len(valid_measurements))(x)
+        
+        input_s = Input(shape=(224, 224, 1))
+        y = Conv2D(32, 5, padding='same', activation='relu')(input_s)
+        y = MaxPooling2D()(y)
+        y = Flatten()(y)
+        y = Dense(32, activation='relu')(y)
+        y = Dense(len(valid_measurements))(y)
+
+        combined = Maximum()([x, y])
+
+        z = Conv2D(4096, 5, padding='valid')(combined)
+        z = Dropout(0.5)(z)
+        z = Conv2D(4096, 1)(z)
+        z = tf.reduce_mean(z, [1,2], keepdims=True)
+        z = Conv2D(len(valid_measurements), 1)(z)
+        z = tf.squeeze(z, [1, 2])
+
+        model = Model(inputs=[input_f, input_s], outputs=z)
 
     num_of_epochs = json.loads(config[config_network]['Epochs'])
     learning_rate = json.loads(config[config_network]['LearningRate'])
