@@ -29,7 +29,7 @@ parser = argparse.ArgumentParser(description=prog_text)
 parser.add_argument("-c", "--config", help="set configuration file")
 parser.add_argument("-g", "--generated", help="process generated body files (true/false)",default="false")
 parser.add_argument("-d", "--debug", help="produce debug information (true/false)",default="false")
-parser.add_argument("-a","--angles",type=int,help="select amount of angles used (NET_JORI)", default=1)
+parser.add_argument("-a","--angles",type=int,help="select amount of angles used (NET_JORI)", default=2)
 parser.parse_args()
 
 # Read arguments from the command line
@@ -316,27 +316,22 @@ elif config_network == 'NET_JORI':
         ])
     if (angles == 2):
         input_f = Input(shape=(224, 224, 1))
-        x = Conv2D(32, 5, padding='same', activation='relu')(input_f)
-        x = MaxPooling2D()(x)
-        x = Flatten()(x)
-        x = Dense(32, activation='relu')(x)
-        x = Dense(len(valid_measurements))(x)
+        x = Conv2D(16,5, padding='same', kernel_initializer=tf.initializers.GlorotUniform(), activation='relu')(input_f)
+        x = MaxPooling2D(pool_size=(3,3))(x)
         
         input_s = Input(shape=(224, 224, 1))
-        y = Conv2D(32, 5, padding='same', activation='relu')(input_s)
-        y = MaxPooling2D()(y)
-        y = Flatten()(y)
-        y = Dense(32, activation='relu')(y)
-        y = Dense(len(valid_measurements))(y)
+        y = Conv2D(16, 5, padding='same', kernel_initializer=tf.initializers.GlorotUniform(), activation='relu')(input_s)
+        y = MaxPooling2D(pool_size=(3,3))(y)
 
         combined = Maximum()([x, y])
 
-        z = Conv2D(4096, 5, padding='valid')(combined)
-        z = Dropout(0.5)(z)
-        z = Conv2D(4096, 1)(z)
-        z = tf.reduce_mean(z, [1,2], keepdims=True)
-        z = Conv2D(len(valid_measurements), 1)(z)
-        z = tf.squeeze(z, [1, 2])
+        z = Conv2D(32, 5, padding='valid')(combined)
+        z = MaxPooling2D()(z)
+        z = Conv2D(32, 3, padding='same', activation='relu')(z)
+        z = MaxPooling2D()(z)
+        z = Flatten()(z)
+        z = Dense(32, activation='relu')(z)
+        z = Dense(len(valid_measurements))(z)
 
         model = Model(inputs=[input_f, input_s], outputs=z)
 

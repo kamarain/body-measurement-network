@@ -199,7 +199,7 @@ def on_draw():
     gluLookAt(0,50,+2000,0,0,0,0,1,0)
 
     glRotatef(-90.0, 1.0, 0.0, 0.0)
-    glRotatef(45.0, 0.0, 0.0, 1.0)
+    glRotatef(90.0, 0.0, 0.0, 1.0) #old value 45.0
 
     if wavefront_obj:
         visualization.draw(wavefront_obj)
@@ -234,7 +234,7 @@ def on_draw():
     gluLookAt(0,50,+2000,0,0,0,0,1,0)
 
     glRotatef(-90.0, 1.0, 0.0, 0.0)
-    glRotatef(135.0, 0.0, 0.0, 1.0) # Side View, Face to Right
+    glRotatef(210.0, 0.0, 0.0, 1.0) # Side View, Face to Right #old value 135.0
 
     if wavefront_obj:
         visualization.draw(wavefront_obj)

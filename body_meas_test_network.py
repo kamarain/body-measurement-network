@@ -102,6 +102,8 @@ for i, file in enumerate(test_img_list):
         Y_pr[i,:] = model.predict([img_f])
     elif config_network == 'NET_CAESAR':
         Y_pr[i,:] = model.predict([img_f, img_s])
+    elif config_network == 'NET_JORI':
+        Y_pr[i,:] = model.predict([img_f, img_s])
     else:
         print(f"Batch input not defined for network called {config_network} !!")
 
